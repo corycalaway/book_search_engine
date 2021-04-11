@@ -10,9 +10,9 @@ const PORT = process.env.PORT || 3001;
 const { authMiddleware } = require('./utils/auth');
 
 const server = new ApolloServer({
-  typeDefs
-  // resolvers,
-  // context: authMiddleware
+  typeDefs,
+  resolvers,
+  context: authMiddleware
 });
 // integrate our Apollo server with the Express application as middlewawre
 server.applyMiddleware({ app });
@@ -29,7 +29,7 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/build/index.html'));
 });
 
-app.use(routes);
+// app.use(routes);
 
 db.once('open', () => {
   app.listen(PORT, () => {
