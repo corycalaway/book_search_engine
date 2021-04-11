@@ -41,20 +41,24 @@ const resolvers = {
             const token = signToken(user);
             return { token, user };
           },
-          saveBook: async (parent, args, context) => {
-              console.log(args)
+          saveBook: async (parent, {input}, context) => {
+            //   console.log(args)
+            //   console.log(context.user._id )
+            //   console.log(...args)
+
+              console.log(input)
             if (context.user) {
-              const book = await Book.create({ ...args, username: context.user.username });
+            //   const book = await Book.create({ ...input, savedBooks: input });
           
-              await User.findByIdAndUpdate(
+              const book = await User.findByIdAndUpdate(
                 // { _id: context.user._id },
                 // { $push: { savedBooks: book._id } },
                 // { new: true }
                 { _id: context.user._id },
-                { $push: { savedBooks: args } },
+                { $addToSet: { savedBooks: input } },
                 { new: true }
               );
-          
+                console.log(book)
               return book;
             }
           
