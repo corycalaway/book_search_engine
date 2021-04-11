@@ -41,6 +41,7 @@ type User {
     login(email: String!, password: String!): Auth
     addUser(username: String!, email: String!, password: String!): Auth
     saveBook(input: BookInput!): User
+    removeBook(bookId: String!): User
   },
   type Auth {
       token: ID!
@@ -48,6 +49,22 @@ type User {
   }
 
 `;
+// mutation saveBook($input: BookInput!) {
+//     saveBook(input: $input) {
+      
+//      username
+//       savedBooks{
+//         authors
+//         description
+//         bookId
+//         image
+//         link
+//         title
+//       }
+     
+      
+//     }
+//   }
 // {
 //     "input": {
 //       "authors": "no",

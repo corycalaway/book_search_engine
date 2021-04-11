@@ -45,8 +45,9 @@ const resolvers = {
             //   console.log(args)
             //   console.log(context.user._id )
             //   console.log(...args)
-
-              console.log(input)
+            console.log('here')
+                console.log(input.authors)
+            
             if (context.user) {
             //   const book = await Book.create({ ...input, savedBooks: input });
           
@@ -58,7 +59,31 @@ const resolvers = {
                 { $addToSet: { savedBooks: input } },
                 { new: true }
               );
-                console.log(book)
+              
+              return book;
+            }
+          
+            throw new AuthenticationError('You need to be logged in!');
+          },
+          removeBook: async (parent, args, context) => {
+            //   console.log(args)
+            //   console.log(context.user._id )
+            //   console.log(...args)
+            console.log('here')
+                console.log(args.bookId)
+            
+            if (context.user) {
+            //   const book = await Book.create({ ...input, savedBooks: input });
+          
+              const book = await User.findByIdAndUpdate(
+                // { _id: context.user._id },
+                // { $push: { savedBooks: book._id } },
+                // { new: true }
+                { _id: context.user._id },
+                { $pull: { savedBooks: { bookId: args.bookId } } },
+                { new: true }
+              );
+              
               return book;
             }
           
