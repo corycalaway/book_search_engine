@@ -8,16 +8,26 @@ import { removeBookId } from '../utils/localStorage';
 import { GET_ME } from '../utils/queries';
 
 const SavedBooks = () => {
-  const [userData, setUserData] = useState({});
+  console.log(GET_ME)
+  const { loading, error, data } = useQuery(GET_ME)
+  console.log(loading)
+  const userData = data
+  // const [userData, setUserData] = useState(data);
+  // // if(!loading){
+  // // console.log(data)
+  // setUserData(data);
+  // }
+   // if data isn't here yet, say so
  
-  const { data: getMe   } = useQuery(GET_ME);
-  setUserData({
-    
-     getMe
-  });
+ 
+ 
+  
 
+//   setUserData(getMe);
+// console.log(getMe)
+  
   // use this to determine if `useEffect()` hook needs to run again
-  const userDataLength = Object.keys(userData).length;
+  // const userDataLength = Object.keys(userData).length;
 
   // useEffect(() => {
   //   const getUserData = async () => {
@@ -60,7 +70,7 @@ const SavedBooks = () => {
       }
 
       const updatedUser = await response.json();
-      setUserData(updatedUser);
+      // setUserData(updatedUser);
       // upon success, remove book's id from localStorage
       removeBookId(bookId);
     } catch (err) {
@@ -68,11 +78,17 @@ const SavedBooks = () => {
     }
   };
 
-  // if data isn't here yet, say so
-  if (!userDataLength) {
+  if (!userData) {
     return <h2>LOADING...</h2>;
   }
-
+  // if data isn't here yet, say so
+  // if (!userDataLength) {
+  //   return <h2>LOADING...</h2>;
+  // }
+  // if(userData){
+    // console.log(data.me)
+    
+    console.log(userData)
   return (
     <>
       <Jumbotron fluid className='text-light bg-dark'>
@@ -82,12 +98,12 @@ const SavedBooks = () => {
       </Jumbotron>
       <Container>
         <h2>
-          {userData.savedBooks.length
-            ? `Viewing ${userData.savedBooks.length} saved ${userData.savedBooks.length === 1 ? 'book' : 'books'}:`
+          {userData.me.savedBooks.length
+            ? `Viewing ${userData.me.savedBooks.length} saved ${userData.me.savedBooks.length === 1 ? 'book' : 'books'}:`
             : 'You have no saved books!'}
         </h2>
         <CardColumns>
-          {userData.savedBooks.map((book) => {
+          {userData.me.savedBooks.map((book) => {
             return (
               <Card key={book.bookId} border='dark'>
                 {book.image ? <Card.Img src={book.image} alt={`The cover for ${book.title}`} variant='top' /> : null}
@@ -106,6 +122,7 @@ const SavedBooks = () => {
       </Container>
     </>
   );
+        // }
 };
 
 export default SavedBooks;

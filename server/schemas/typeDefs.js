@@ -31,19 +31,19 @@ type User {
    
   
   },
-  type Query {
+type Query {
     me: User
     users: [User]
     user(username: String!): User
     savedBooks(username: String): [Book]
   },
-  type Mutation {
+type Mutation {
     login(email: String!, password: String!): Auth
     addUser(username: String!, email: String!, password: String!): Auth
     saveBook(input: BookInput!): User
     removeBook(bookId: String!): User
   },
-  type Auth {
+type Auth {
       token: ID!
       user: User
   }
@@ -56,7 +56,7 @@ type User {
 
 // mutation saveBook($input: BookInput!) {
 //     saveBook(input: $input) {
-      
+
 //      username
 //       savedBooks{
 //         authors
@@ -66,8 +66,8 @@ type User {
 //         link
 //         title
 //       }
-     
-      
+
+
 //     }
 //   }
 // {
@@ -96,7 +96,7 @@ type User {
 //     users: [User]
 //     user(username: String!): User
 //     savedBooks(username: String): [bookSchema]
-   
+
 //   },
 //typeDefs.js: Define the necessary Query and Mutation types:
 
