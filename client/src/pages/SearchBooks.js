@@ -5,10 +5,16 @@ import Auth from '../utils/auth';
 import { searchGoogleBooks } from '../utils/API';
 import { saveBookIds, getSavedBookIds } from '../utils/localStorage';
 import { SAVE_BOOK } from '../utils/mutations';
+import { GET_ME } from '../utils/queries';
 
 const SearchBooks = () => {
+
   // save book mutation
-  const [saveBook, { error }] = useMutation(SAVE_BOOK);
+  const [saveBook] = useMutation(SAVE_BOOK, {
+    refetchQueries: [
+      { query: GET_ME }
+    ]
+  }) ;
   // create state for holding returned google api data
   const [searchedBooks, setSearchedBooks] = useState([]);
   // create state for holding our search field data
@@ -17,7 +23,6 @@ const SearchBooks = () => {
   // create state to hold saved bookId values
   const [savedBookIds, setSavedBookIds] = useState(getSavedBookIds());
 
-  
   // set up useEffect hook to save `savedBookIds` list to localStorage on component unmount
   // learn more here: https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup
   useEffect(() => {
@@ -62,11 +67,7 @@ const SearchBooks = () => {
     const bookToSave = searchedBooks.find((book) => book.bookId === bookId);
    
     // get token
-    console.log(Auth.getToken())
     const token = Auth.loggedIn() ? Auth.getToken() : null;
-    console.log(token)
-    console.log({bookToSave})
-    console.log(bookToSave)
     if (!token) {
       return false;
     }
@@ -75,25 +76,14 @@ const SearchBooks = () => {
       const  {data}  = await saveBook({
         variables: {bookToSave}
       });
-      
       console.log(data)
       // Auth.login(data.saveBook.token);
       setSavedBookIds([...savedBookIds, bookToSave.bookId]);
+      
+      
     } catch (e) {
       console.error(e);
     }
-    // try {
-    //   const response = await saveBook(bookToSave, token);
-
-    //   if (!response.ok) {
-    //     throw new Error('something went wrong!');
-    //   }
-
-    //   // if book successfully saves to user's account, save book id to state
-    //   
-    // } catch (err) {
-    //   console.error(err);
-    // }
   };
 
   return (
@@ -161,9 +151,3 @@ const SearchBooks = () => {
 };
 
 export default SearchBooks;
-
-// SearchBooks.js:
-
-// Use the Apollo useMutation() Hook to execute the SAVE_BOOK mutation in the handleSaveBook() function instead of the saveBook() function imported from the API file.
-
-// Make sure you keep the logic for saving the book's ID to state in the try...catch block!
