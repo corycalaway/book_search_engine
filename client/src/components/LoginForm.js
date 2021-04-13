@@ -55,7 +55,7 @@ const LoginForm = () => {
       username: '',
       email: '',
       password: '',
-    });
+    }); 
   };
 
   return (
